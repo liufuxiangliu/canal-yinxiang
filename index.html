@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>运河印象 - 运河采耳·印象SPA</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+</head>
+<body>
+  <!-- 背景图片 -->
+  <img class="background-image" id="backgroundImage" src="" alt="">
+  
+  <div class="container" id="app">
+    <!-- 底部导航 -->
+    <div class="tab-bar">
+      <div class="tab-item" :class="{active: currentPage === 'index'}" @click="switchPage('index')">
+        <div class="tab-text">首页</div>
+      </div>
+      <div class="tab-item" :class="{active: currentPage === 'all'}" @click="switchPage('all')">
+        <div class="tab-text">全部项目</div>
+      </div>
+      <div class="tab-item" :class="{active: currentPage === 'about'}" @click="switchPage('about')">
+        <div class="tab-text">关于我们</div>
+      </div>
+      <div class="tab-item" :class="{active: currentPage === 'contact'}" @click="switchPage('contact')">
+        <div class="tab-text">联系我们</div>
+      </div>
+      <div class="tab-item" :class="{active: currentPage === 'manage'}" @click="switchPage('manage')">
+        <div class="tab-text">管理</div>
+      </div>
+    </div>
+
+    <!-- 首页 -->
+    <div id="page-index" class="page" :class="{active: currentPage === 'index'}">
+      <!-- 顶部轮播 -->
+      <div class="banner-swiper glass-card">
+        <div class="swiper">
+          <div class="swiper-item" :class="{active: swiperIndex === index}" v-for="(item, index) in bannerImages">
+            <img class="swiper-image" :src="item" alt="">
+          </div>
+        </div>
+        <div class="swiper-indicators">
+          <span class="indicator" :class="{active: swiperIndex === index}" v-for="(item, index) in bannerImages"></span>
+        </div>
+      </div>
+
+      <!-- 品牌标题 -->
+      <div class="banner glass-card">
+        <div class="banner-title">运河 印象</div>
+        <div class="banner-subtitle">运河采耳 · 印象SPA</div>
+      </div>
+
+      <!-- 分类入口 -->
+      <div class="category-section">
+        <div class="section-title">服务分类</div>
+        <div class="category-grid" v-if="!canSeeHidden">
+          <div class="category-grid-card card-ear" @click="goToCategory('ear')">
+            <div class="category-name">运河·采耳</div>
+            <div class="category-desc">舒享净逸</div>
+          </div>
+          <div class="category-grid-card card-spa" @click="goToCategory('spa')">
+            <div class="category-name">印象·SPA</div>
+            <div class="category-desc">舒缓放松</div>
+          </div>
+          <div class="category-grid-card card-single" @click="goToCategory('single')">
+            <div class="category-name">单项服务</div>
+            <div class="category-desc">特色项目</div>
+          </div>
+          <div class="category-grid-card card-package" @click="goToCategory('package')">
+            <div class="category-name">店长推荐</div>
+            <div class="category-desc">精选套餐</div>
+          </div>
+        </div>
+        <!-- 商家和超级管理员能看到龙筋保养，显示2行3列 -->
+        <div class="category-grid grid-six" v-if="canSeeHidden">
+          <div class="category-grid-card card-ear" @click="goToCategory('ear')">
+            <div class="category-name">运河·采耳</div>
+            <div class="category-desc">舒享净逸</div>
+          </div>
+          <div class="category-grid-card card-spa" @click="goToCategory('spa')">
+            <div class="category-name">印象·SPA</div>
+            <div class="category-desc">舒缓放松</div>
+          </div>
+          <div class="category-grid-card card-single" @click="goToCategory('single')">
+            <div class="category-name">单项服务</div>
+            <div class="category-desc">特色项目</div>
+          </div>
+          <div class="category-grid-card card-package" @click="goToCategory('package')">
+            <div class="category-name">店长推荐</div>
+            <div class="category-desc">精选套餐</div>
+          </div>
+          <div class="category-grid-card card-hidden" @click="goToCategory('hidden')">
+            <div class="category-name">龙筋保养</div>
+            <div class="category-desc">深度调理</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 热门推荐 -->
+      <div class="recommend-section">
+        <div class="section-title">热门推荐</div>
+        <div class="recommend-scroll">
+          <div class="recommend-card" v-for="item in recommendList" @click="goToDetail(item.id)">
+            <div class="recommend-image" :style="{backgroundImage: 'url(' + (item.images && item.images[0] ? item.images[0] : '') + ')'}"></div>
+            <div class="recommend-info">
+              <div class="recommend-name">{{item.name}}</div>
+              <div class="recommend-price">¥{{item.groupPrice}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 全部项目页 -->
+    <div id="page-all" class="page" :class="{active: currentPage === 'all'}">
+      <div class="category-tabs">
+        <div class="category-tab" :class="{active: currentCategory === item.key}" @click="switchCategory(item.key)" v-for="item in categoryList">
+          {{item.name}}
+        </div>
+      </div>
+
+      <div class="project-list">
+        <div class="project-card glass-card" v-for="item in projectList" @click="goToDetail(item.id)">
+          <div class="project-info">
+            <div class="project-name">{{item.name}}</div>
+            <div class="project-desc">{{item.desc}}</div>
+            <div class="project-price">
+              <span class="group-price">¥{{item.groupPrice}}</span>
+              <span class="original-price">原价¥{{item.originalPrice}}</span>
+            </div>
+          </div>
+          <div class="project-image" v-if="item.images && item.images[0]">
+            <img :src="item.images[0]" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 项目详情页 -->
+    <div id="page-detail" class="page" :class="{active: currentPage === 'detail'}">
+      <div class="detail-card glass-card" v-if="currentProject">
+        <!-- 图片轮播 -->
+        <div class="swiper-container" v-if="currentProject.images && currentProject.images.length > 0">
+          <div class="detail-swiper">
+            <div class="swiper-slide" :class="{active: detailSlide === index}" v-for="(img, index) in currentProject.images">
+              <img class="detail-image" :src="img" alt="">
+            </div>
+          </div>
+          <div class="swiper-indicators">
+            <span class="indicator" :class="{active: detailSlide === index}" v-for="(img, index) in currentProject.images"></span>
+          </div>
+        </div>
+
+        <div class="detail-info">
+          <h1 class="detail-title">{{currentProject.name}}</h1>
+          <p class="detail-desc" v-if="currentProject.desc">{{currentProject.desc}}</p>
+          <p class="detail-detail" v-if="currentProject.detail">{{currentProject.detail}}</p>
+          
+          <div class="detail-prices">
+            <div class="price-row">
+              <span class="price-label">美团价</span>
+              <span class="price-value price-group">¥{{currentProject.groupPrice}}</span>
+            </div>
+            <div class="price-row">
+              <span class="price-label">原价</span>
+              <span class="price-value price-original">¥{{currentProject.originalPrice}}</span>
+            </div>
+            <div class="price-row" v-if="role === 'admin' || role === 'super'">
+              <span class="price-label">会员价</span>
+              <span class="price-value price-member">¥{{currentProject.memberPrice}}</span>
+            </div>
+            <div class="price-row">
+              <span class="price-label">时长</span>
+              <span class="price-value">{{currentProject.duration}}分钟</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="back-btn" @click="goBack">
+        返回
+      </div>
+    </div>
+
+    <!-- 关于我们页 -->
+    <div id="page-about" class="page" :class="{active: currentPage === 'about'}">
+      <div class="content-card glass-card">
+        <h2>运河印象</h2>
+        <p>运河印象，专注采耳SPA养生，传承传统技艺，带给您身心放松的极致体验。</p>
+        <p>我们坚持专业手法，舒适环境，贴心服务，让您在喧嚣都市中享受一份宁静。</p>
+        <p>欢迎您前来体验！</p>
+      </div>
+    </div>
+
+    <!-- 联系我们页 -->
+    <div id="page-contact" class="page" :class="{active: currentPage === 'contact'}">
+      <div class="content-card glass-card">
+        <div class="contact-item">
+          <div class="contact-label">营业时间</div>
+          <div class="contact-value">10:00 - 22:00</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">联系电话</div>
+          <div class="contact-value"><a :href="'tel:' + phone">{{phone}}</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">门店地址</div>
+          <div class="contact-value">{{address}}</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">导航</div>
+          <a class="nav-btn" :href="'https://www.google.com/maps/search/' + encodeURIComponent(address)" target="_blank">打开地图导航</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 管理登录页 -->
+    <div id="page-manage" class="page" :class="{active: currentPage === 'manage'}">
+      <div class="login-card glass-card">
+        <h2>管理登录</h2>
+        <div class="input-group">
+          <label>密码</label>
+          <input type="password" v-model="password" placeholder="请输入管理密码">
+        </div>
+        <button class="login-btn" @click="login">登录</button>
+        <button class="logout-btn" v-if="role" @click="logout" style="margin-top: 20rpx;">退出登录</button>
+        <div class="role-info" v-if="role">
+          当前角色: {{roleName}}
+        </div>
+
+        <!-- 联系信息设置 -->
+        <div class="contact-setting" v-if="role === 'admin' || role === 'super'" style="margin-top: 30rpx;">
+          <h3>门店信息</h3>
+          <div class="input-group">
+            <label>联系电话</label>
+            <input class="form-input" v-model="phone" @input="saveContact">
+          </div>
+          <div class="input-group">
+            <label>门店地址</label>
+            <input class="form-input" v-model="address" @input="saveContact">
+          </div>
+        </div>
+
+        <!-- 背景设置 -->
+        <div class="background-setting" v-if="role === 'admin' || role === 'super'" style="margin-top: 20rpx;">
+          <h3>全局背景图</h3>
+          <input type="file" accept="image/*" id="backgroundInput" @change="onBackgroundSelect" style="margin-top: 10rpx;">
+          <div class="image-preview" v-if="backgroundImage" style="margin-top: 10rpx;">
+            <img :src="backgroundImage" alt="" style="max-width: 100%; border-radius: 10rpx;">
+          </div>
+        </div>
+
+        <!-- 添加新项目 -->
+        <button class="add-btn" v-if="role === 'admin' || role === 'super'" @click="addNewProject" style="margin-top: 30rpx;">+ 添加新项目</button>
+
+        <!-- 编辑入口 -->
+        <button class="edit-btn" v-if="role === 'admin' || role === 'super'" @click="switchPage('edit')" style="margin-top: 20rpx;">编辑所有项目</button>
+      </div>
+    </div>
+
+    <!-- 项目编辑页 -->
+    <div id="page-edit" class="page" :class="{active: currentPage === 'edit'}">
+      <!-- 商家只能看，不能编辑 -->
+      <div v-if="role === 'merchant'">
+        <div class="project-edit-card glass-card" v-for="project in filteredProjects">
+          <div class="project-title">项目ID: {{project.id}}</div>
+          <div class="input-group">
+            <label class="input-label">项目名称</label>
+            <div class="view-text">{{project.name}}</div>
+          </div>
+          <div class="input-group">
+            <label class="input-label">项目描述</label>
+            <div class="view-text">{{project.desc}}</div>
+          </div>
+          <div class="input-group" v-if="project.detail">
+            <label class="input-label">详细介绍</label>
+            <div class="view-text">{{project.detail}}</div>
+          </div>
+          <div class="input-group" v-if="project.images && project.images.length > 0">
+            <label class="input-label">项目图片</label>
+            <div class="images-list">
+              <div class="image-item" v-for="img in project.images">
+                <img class="image-preview" :src="img" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="input-group half">
+              <label class="input-label">原价</label>
+              <div class="view-text">¥{{project.originalPrice}}</div>
+            </div>
+            <div class="input-group half">
+              <label class="input-label">时长(分钟)</label>
+              <div class="view-text">{{project.duration}}</div>
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="input-group half">
+              <label class="input-label">美团价</label>
+              <div class="view-text">¥{{project.groupPrice}}</div>
+            </div>
+            <div class="input-group half">
+              <label class="input-label">会员价</label>
+              <div class="view-text">¥{{project.memberPrice}}</div>
+            </div>
+          </div>
+          <div class="setting-item">
+            <label class="setting-label">项目分类</label>
+            <div class="view-text">{{getCategoryName(project.category)}}</div>
+          </div>
+          <div class="setting-item">
+            <label class="setting-label">隐藏项目</label>
+            <div class="view-text">{{project.hidden ? '是' : '否'}}</div>
+          </div>
+          <div class="setting-item">
+            <label class="setting-label">首页热门推荐</label>
+            <div class="view-text">{{project.isHot ? '是' : '否'}}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- admin 和 super 可以编辑 -->
+      <div v-else>
+        <div class="edit-list">
+          <div class="project-edit-card glass-card" v-for="project in filteredProjects
