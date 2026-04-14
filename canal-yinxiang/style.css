@@ -1,0 +1,538 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: #f5f0e6;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+  object-fit: cover;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: 120px;
+}
+
+.page {
+  display: none;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.page.active {
+  display: block;
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 8px 32px rgba(139, 105, 20, 0.15);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+/* 顶部轮播 */
+.banner-swiper {
+  padding: 10px;
+  margin-bottom: 30px;
+}
+
+.swiper {
+  border-radius: 10px;
+  overflow: hidden;
+  height: 300px;
+  position: relative;
+}
+
+.swiper-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.swiper-item.active {
+  opacity: 1;
+}
+
+.swiper-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.swiper-indicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.swiper-indicators .indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.swiper-indicators .indicator.active {
+  background: #D4AF37;
+}
+
+.banner {
+  text-align: center;
+  padding: 50px 30px;
+  margin-bottom: 30px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(255, 255, 255, 0.6) 100%);
+}
+
+.banner-title {
+  font-size: 48px;
+  font-weight: bold;
+  color: #8B6914;
+  letter-spacing: 8px;
+  margin-bottom: 10px;
+}
+
+.banner-subtitle {
+  font-size: 28px;
+  color: #A0826D;
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #8B6914;
+  margin: 30px 0 20px 10px;
+}
+
+.category-section {
+  margin-bottom: 30px;
+}
+
+/* 网格布局 默认2x2 */
+.category-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* 商家显示2行3列 */
+.category-grid.grid-six {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.category-grid-card {
+  border-radius: 20px;
+  padding: 40px 20px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 8px 24px rgba(139, 105, 20, 0.15);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.category-grid-card:active {
+  transform: scale(0.98);
+}
+
+.card-ear {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(255, 255, 255, 0.6) 100%);
+}
+
+.card-spa {
+  background: linear-gradient(135deg, rgba(139, 105, 20, 0.15) 0%, rgba(255, 255, 255, 0.6) 100%);
+}
+
+.card-single {
+  background: linear-gradient(135deg, rgba(75, 150, 100, 0.15) 0%, rgba(255, 255, 255, 0.6) 100%);
+}
+
+.card-package {
+  background: linear-gradient(135deg, rgba(180, 80, 80, 0.15) 0%, rgba(255, 255, 255, 0.6) 100%);
+}
+
+.card-hidden {
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.15) 0%, rgba(255, 255, 255, 0.6) 100%);
+}
+
+.category-name {
+  font-size: 32px;
+  font-weight: 600;
+  color: #8B6914;
+  margin-bottom: 8px;
+}
+
+.category-desc {
+  font-size: 24px;
+  color: #A0826D;
+}
+
+/* 热门推荐 */
+.recommend-section {
+  margin-bottom: 30px;
+}
+
+.recommend-scroll {
+  white-space: nowrap;
+  padding-bottom: 20px;
+  overflow-x: auto;
+}
+
+.recommend-card {
+  display: inline-block;
+  width: 280px;
+  margin-right: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  box-shadow: 0 4px 16px rgba(139, 105, 20, 0.1);
+  cursor: pointer;
+}
+
+.recommend-image {
+  width: 100%;
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  background-color: #f4e4c1;
+}
+
+.recommend-info {
+  padding: 20px;
+}
+
+.recommend-name {
+  font-size: 28px;
+  font-weight: 500;
+  color: #4a3800;
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recommend-price {
+  font-size: 26px;
+  color: #D4AF37;
+  font-weight: 600;
+}
+
+/* 分类标签 */
+.category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.category-tab {
+  padding: 10px 20px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: #8B6914;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.category-tab.active {
+  background: #D4AF37;
+  color: white;
+}
+
+/* 项目列表 */
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.project-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 8px 24px rgba(139, 105, 20, 0.15);
+  border-radius: 20px;
+  padding: 30px;
+  cursor: pointer;
+}
+
+.project-info {
+  flex: 1;
+}
+
+.project-name {
+  font-size: 32px;
+  font-weight: 600;
+  color: #4a3800;
+  margin-bottom: 8px;
+}
+
+.project-desc {
+  font-size: 26px;
+  color: #8B6914;
+  margin-bottom: 10px;
+}
+
+.project-price {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.group-price {
+  font-size: 30px;
+  color: #D4AF37;
+  font-weight: 600;
+}
+
+.original-price {
+  font-size: 24px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.project-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 详情页 */
+.detail-card {
+  overflow: hidden;
+}
+
+.swiper-container {
+  position: relative;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.detail-swiper {
+  width: 100%;
+  height: 400px;
+  position: relative;
+}
+
+.swiper-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.swiper-slide.active {
+  opacity: 1;
+}
+
+.detail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #f8f5f0;
+  border-radius: 10px;
+}
+
+.detail-info h1 {
+  font-size: 40px;
+  color: #4a3800;
+  margin-bottom: 20px;
+}
+
+.detail-desc {
+  font-size: 30px;
+  color: #8B6914;
+  margin-bottom: 20px;
+}
+
+.detail-detail {
+  font-size: 28px;
+  color: #A0826D;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.detail-prices {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.price-label {
+  font-size: 28px;
+  color: #8B6914;
+}
+
+.price-value {
+  font-size: 30px;
+}
+
+.price-group {
+  color: #D4AF37;
+  font-weight: 600;
+}
+
+.price-original {
+  color: #8B6914;
+}
+
+.price-member {
+  color: #8B6914;
+  font-weight: 600;
+}
+
+.back-btn {
+  display: block;
+  width: 200px;
+  height: 80px;
+  line-height: 80px;
+  text-align: center;
+  margin: 30px auto;
+  background: #D4AF37;
+  color: white;
+  border-radius: 40px;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* 内容卡片 */
+.content-card h2 {
+  font-size: 40px;
+  color: #8B6914;
+  margin-bottom: 30px;
+}
+
+.content-card p {
+  font-size: 28px;
+  line-height: 1.8;
+  color: #4a3800;
+  margin-bottom: 20px;
+}
+
+/* 联系我们 */
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.contact-label {
+  font-size: 28px;
+  color: #8B6914;
+}
+
+.contact-value {
+  font-size: 28px;
+  color: #4a3800;
+}
+
+.contact-value a {
+  color: #D4AF37;
+  text-decoration: none;
+}
+
+.nav-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #D4AF37;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 26px;
+}
+
+/* 登录卡 */
+.login-card h2 {
+  font-size: 36px;
+  color: #8B6914;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.login-card h3 {
+  font-size: 28px;
+  color: #8B6914;
+  margin-bottom: 15px;
+}
+
+.input-group {
+  margin-bottom: 25px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 28px;
+  color: #8B6914;
+  margin-bottom: 10px;
+}
+
+.form-input {
+  width: 100%;
+  height: 70px;
+  line-height: 70px;
+  padding: 0 20px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+  font-size: 28px;
+  background: rgba(255, 255, 255, 0.5);
+}
